@@ -14,8 +14,8 @@
                 </a>
             </div>
         </div>
-        <div class="card-body">
-            <table class="table table-bordered table-striped table-hover align-middle">
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-striped table-hover align-middle col-12 col-md-6">
                 <thead class="table-light">
                     <tr>
                         <th width="80px">Imagem</th>
@@ -101,7 +101,7 @@
             "language": {
                 "lengthMenu": "Exibindo _MENU_ registros por página",
                 "zeroRecords": "Nenhum registro encontrado",
-                "info": "Exibindo página _PAGE_ de _PAGES_",
+                "info": "Página _PAGE_ de _PAGES_",
                 "infoEmpty": "Nenhum registro encontrado",
                 "infoFiltered": "(filtrado de _MAX_ registros)",
                 "loadingRecords": "Carregando...",

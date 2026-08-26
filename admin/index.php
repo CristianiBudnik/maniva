@@ -32,11 +32,14 @@ require "functions.php";
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
     <link href="css/summernote-bs5.min.css" rel="stylesheet">
 
     <link href="css/sweetalert2.min.css" rel="stylesheet">
 
     <link href="css/style.css" rel="stylesheet">
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
@@ -147,9 +150,6 @@ require "functions.php";
                             <li class="nav-item">
                                 <a class="nav-link" href="cadastrar/variacao">Variação</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="listar/reclamacao">Reclamações</a>
-                            </li>
                         </ul>
                         <div class="d-flex">
                             <div class="dropdown">
@@ -165,6 +165,7 @@ require "functions.php";
                     </div>
                 </div>
             </nav>
+            
             <main class="container mt-5 mb-5">
                 <?php
                 $param = $_GET["param"] ?? "pages/home";
@@ -191,7 +192,7 @@ require "functions.php";
     }
     ?>
 
-    <script src="../dist/main.js"></script>
+    <script src="../dist/app.js"></script>
 
 </body>
 

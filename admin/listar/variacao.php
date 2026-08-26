@@ -14,8 +14,8 @@
                 </a>
             </div>
         </div>
-        <div class="card-body">
-            <table class="table table-bordered table-striped table-hover align-middle">
+        <div class="card-body table-responsive">
+            <table class="table table-bordered table-striped table-hover align-middle col-12 col-md-6">
                 <thead class="table-light">
                     <tr>
                         <th width="60px">ID</th>

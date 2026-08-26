@@ -1,76 +1,62 @@
 <?php
-    if (!isset($page)) exit;
+if (!isset($page))
+    exit;
 ?>
 
-<div class="container">
-    <div class="card mt-5 mb-5 shadow">
-        <div class="card-header">
-            <h2>Dashboard:</h2>
+
+<link href="../src/css/style.css" rel="stylesheet">
+
+
+<div class="dashboard-page">
+
+    <header>
+        <div class="row">
+            <div class="d-flex">
+                <img src="../img/manivinhaEscritorio.png" class="img-logo" alt="manivinha">
+                <h1 class="dash-titulo"><strong>Dashboard <em class="text-warning">Maniva</em></strong></h1>
+            </div>
         </div>
-        <div class="card-body">
-            <div class="row">
-                <div class="col-12 col-md-4 text-center shadow">
-                    <?php
-                        $sqlCategoria = "select count(id) conta from categoria limit 1";
-                        $consultaCategoria = $pdo->prepare($sqlCategoria);
-                        $consultaCategoria->execute();
+    </header>
 
-                        $categorias = $consultaCategoria->fetch(PDO::FETCH_OBJ)->conta;
-                    ?>
-                    <div class="alert alert-info text-center p-4">
-                        <h2>Categorias</h2>
-                        <p>Temos <?=$categorias ?> categorias cadastradas!</p>
-                        <a href="listar/categoria" class="btn btn-primary">Ver Categorias</a>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4 text-center shadow">
-                    <?php
-                        $sqlProdutos = "select count(id) conta from produto limit 1";
-                        $consultaProdutos = $pdo->prepare($sqlProdutos);
-                        $consultaProdutos->execute();
+    <div class="cards-grid text-center">
+        <div class="card card-total">
+            <div class="card-label">Total de Produtos</div>
+            <div id="card-total" class="card-value">Carregando...</div>
+            <br>
+            <a href="listar/produto" class="btn-dash btn btn-primary">Ver Produtos</a>
+        </div>
+        <div class="card card-categoria">
+            <div class="card-label">Categoria com mais produtos</div>
+            <div id="card-categoria" class="card-value">Carregando...</div>
+            <br>
+            <a href="listar/categoria" class="btn-dash btn btn-warning">Ver Categorias</a>
+        </div>
+        <div class="card card-grupo">
+            <div class="card-label">Grupo com mais produtos</div>
+            <div id="card-grupo" class="card-value">Carregando...</div>
+            <br>
+            <a href="listar/grupo" class="btn-dash btn btn-success">Ver Grupos</a>
+        </div>
 
-                        $produtos = $consultaProdutos->fetch(PDO::FETCH_OBJ)->conta;
-                    ?>
-                    <div class="alert alert-warning text-center p-4">
-                        <h2>Produtos</h2>
-                        <p>Temos <span id="card-total-produtos"><?=$produtos ?></span> produtos cadastrados (<span id="card-produtos-ativos">carregando...</span>)!</p>
-                        <a href="listar/produto" class="btn btn-warning">Ver Produtos</a>
-                    </div>
-                </div>
-                <div class="col-12 col-md-4 text-center shadow">
-                    <?php
-                    $sqlGrupo = "select count(id) conta from grupo limit 1";
-                    $consultaGrupo = $pdo->prepare($sqlGrupo);
-                    $consultaGrupo->execute();
-                    $grupos = $consultaGrupo->fetch(PDO::FETCH_OBJ)->conta;
-                    ?>
-                    <div class="alert alert-success text-center p-4">
-                        <h2>Grupos</h2>
-                        <p>Temos <?=$grupos ?> grupos cadastrados!</p>
-                        <a href="listar/grupo" class="btn btn-success">Ver Grupos</a>
-                    </div>
-                </div>
-            </div>
+    </div>
+    <div class="tabela-container">
+        <h2 class="tabela-titulo m-0 p-2">Lista de Produtos</h2>
+        <div class="table-responsive">
+            <table id="tabela-listagem-produtos"
+                class="table table-bordered table-striped table-hover align-middle col-12 col-md-6">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Produto</th>
+                        <th>Grupo</th>
+                        <th>Categoria</th>
+                        <th>Disponível</th>
+                    </tr>
+                </thead>
+                <tbody id="tabela-produtos-body">
 
-            <!-- Tabela Carregada Dinamicamente via TypeScript / API -->
-            <div class="mt-4">
-                <h4 class="mb-3">Produtos em Destaque</h4>
-                <table class="table table-bordered table-striped table-hover align-middle">
-                    <thead class="table-dark">
-                        <tr>
-                            <th width="80px">ID</th>
-                            <th>Produto</th>
-                            <th>Categoria</th>
-                            <th width="150px" class="text-center">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabela-produtos-body">
-                        <tr>
-                            <td colspan="4" class="text-center">Carregando produtos via TypeScript...</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
