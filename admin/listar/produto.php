@@ -24,6 +24,7 @@
                         <th>Grupo</th>
                         <th>Categoria</th>
                         <th>Descrição</th>
+                        <th width="100px" class="text-center">Status</th>
                         <th width="150px" class="text-center">Opções</th>
                     </tr>
                 </thead>
@@ -34,6 +35,7 @@
                                     p.nome,
                                     p.descricao,
                                     p.imagem_url,
+                                    p.disponivel,
                                     c.nome AS categoria,
                                     g.nome AS grupo
                                   FROM produto p
@@ -61,9 +63,25 @@
                             <td><?= htmlspecialchars($dados->categoria) ?></td>
                             <td><?= strip_tags($dados->descricao) ?></td>
                             <td class="text-center">
+                                <?php if ($dados->disponivel == 1): ?>
+                                    <span class="badge bg-success">Disponível</span>
+                                <?php else: ?>
+                                    <span class="badge bg-danger">Indisponível</span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="text-center">
                                 <a href="cadastrar/produto/<?= $dados->id ?>" class="btn btn-warning btn-sm d-flex justify-content-center align-items-center gap-2 mb-2" title="Editar">
                                     <i class="bi bi-pencil-square"></i> Editar
                                 </a>
+                                <?php if ($dados->disponivel == 1): ?>
+                                    <a href="javascript:alterarStatus(<?= $dados->id ?>, 'desativar')" class="btn btn-outline-secondary btn-sm d-flex justify-content-center align-items-center gap-2 mb-2" title="Desativar Produto">
+                                        <i class="bi bi-slash-circle"></i> Desativar
+                                    </a>
+                                <?php else: ?>
+                                    <a href="javascript:alterarStatus(<?= $dados->id ?>, 'ativar')" class="btn btn-outline-success btn-sm d-flex justify-content-center align-items-center gap-2 mb-2" title="Ativar Produto">
+                                        <i class="bi bi-check-circle"></i> Ativar
+                                    </a>
+                                <?php endif; ?>
                                 <a href="javascript:excluir(<?= $dados->id ?>)" class="btn btn-danger btn-sm d-flex justify-content-center align-items-center gap-2" title="Excluir">
                                     <i class="bi bi-trash"></i> Excluir
                                 </a>
@@ -78,6 +96,27 @@
     </div>
 </div>
 <script>
+    function alterarStatus(id, acao) {
+        const textoAcao = acao === 'desativar' ? 'desativar este produto' : 'ativar este produto';
+        const textoBotao = acao === 'desativar' ? 'Sim, desativar!' : 'Sim, ativar!';
+        const corBotao = acao === 'desativar' ? '#6c757d' : '#198754';
+
+        Swal.fire({
+            title: `Deseja realmente ${textoAcao}?`,
+            text: acao === 'desativar' ? 'O produto ficará indisponível para exibição.' : 'O produto voltará a ficar disponível.',
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonColor: corBotao,
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: textoBotao,
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                location.href = "ativo/produto/" + id;
+            }
+        });
+    }
+
     function excluir(id) {
         Swal.fire({
             title: "Deseja realmente excluir?",

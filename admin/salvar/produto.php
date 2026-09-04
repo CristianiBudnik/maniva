@@ -7,6 +7,8 @@
         $id = trim($_POST["id"] ?? NULL);
         $nome = trim($_POST["nome"] ?? NULL);
         $descricao = trim($_POST["descricao"] ?? NULL);
+        $peso = trim($_POST["peso"] ?? NULL);
+        $tipo_embalagem = trim($_POST["tipo_embalagem"] ?? NULL);
         $categoria_id = trim($_POST["categoria_id"] ?? NULL);
         $ativo = trim($_POST["ativo"] ?? 1);
 
@@ -30,12 +32,14 @@
                 exit;
             }
 
-            // Inserir produto
-            $sqlCadastro = "INSERT INTO produto (nome, descricao, imagem_url, disponivel) VALUES (:nome, :descricao, :imagem_url, :disponivel)";
+            // Inserir produto com peso e tipo_embalagem
+            $sqlCadastro = "INSERT INTO produto (nome, descricao, imagem_url, peso, tipo_embalagem, disponivel) VALUES (:nome, :descricao, :imagem_url, :peso, :tipo_embalagem, :disponivel)";
             $consultaCadastro = $pdo->prepare($sqlCadastro);
             $consultaCadastro->bindParam(":nome", $nome);
             $consultaCadastro->bindParam(":descricao", $descricao);
             $consultaCadastro->bindParam(":imagem_url", $arquivo);
+            $consultaCadastro->bindParam(":peso", $peso);
+            $consultaCadastro->bindParam(":tipo_embalagem", $tipo_embalagem);
             $consultaCadastro->bindParam(":disponivel", $ativo);
 
             if ($consultaCadastro->execute()) {
@@ -58,10 +62,12 @@
 
         } else if (empty($_FILES["imagem_url"]["name"])) {
             // Atualizar sem imagem
-            $sqlCadastro = "UPDATE produto SET nome = :nome, descricao = :descricao, disponivel = :disponivel WHERE id = :id";
+            $sqlCadastro = "UPDATE produto SET nome = :nome, descricao = :descricao, peso = :peso, tipo_embalagem = :tipo_embalagem, disponivel = :disponivel WHERE id = :id";
             $consultaCadastro = $pdo->prepare($sqlCadastro);
             $consultaCadastro->bindParam(":nome", $nome);
             $consultaCadastro->bindParam(":descricao", $descricao);
+            $consultaCadastro->bindParam(":peso", $peso);
+            $consultaCadastro->bindParam(":tipo_embalagem", $tipo_embalagem);
             $consultaCadastro->bindParam(":disponivel", $ativo);
             $consultaCadastro->bindParam(":id", $id);
 
@@ -88,11 +94,13 @@
 
         } else {
             // Atualizar com nova imagem
-            $sqlCadastro = "UPDATE produto SET nome = :nome, descricao = :descricao, imagem_url = :imagem_url, disponivel = :disponivel WHERE id = :id";
+            $sqlCadastro = "UPDATE produto SET nome = :nome, descricao = :descricao, imagem_url = :imagem_url, peso = :peso, tipo_embalagem = :tipo_embalagem, disponivel = :disponivel WHERE id = :id";
             $consultaCadastro = $pdo->prepare($sqlCadastro);
             $consultaCadastro->bindParam(":nome", $nome);
             $consultaCadastro->bindParam(":descricao", $descricao);
             $consultaCadastro->bindParam(":imagem_url", $arquivo);
+            $consultaCadastro->bindParam(":peso", $peso);
+            $consultaCadastro->bindParam(":tipo_embalagem", $tipo_embalagem);
             $consultaCadastro->bindParam(":disponivel", $ativo);
             $consultaCadastro->bindParam(":id", $id);
 

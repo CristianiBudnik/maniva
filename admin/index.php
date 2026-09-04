@@ -119,11 +119,26 @@ require "functions.php";
 
     } else {
         //mostrar a tela do sistema
+
+        //descobre qual "seção" está ativa a partir da rota atual (?param=)
+        $paramAtual  = $_GET["param"] ?? "pages/home";
+        $partesAtual = explode("/", $paramAtual);
+        $secaoAtual  = $partesAtual[1] ?? $partesAtual[0]; // ex: cadastrar/categoria -> categoria | pages/home -> home
+
+        function classeNav($secaoAtual, $secao)
+        {
+            return ($secaoAtual === $secao) ? "nav-link active" : "nav-link";
+        }
+
+        function ariaNav($secaoAtual, $secao)
+        {
+            return ($secaoAtual === $secao) ? ' aria-current="page"' : "";
+        }
         ?>
-            <nav class="navbar navbar-expand-lg">
+            <nav class="navbar navbar-expand-lg navbar-dark navbar-maniva">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="index.php">
-                        <img src="../img/maniva.PNG" alt="Logo Painel" width="130px">
+                    <a class="navbar-brand d-flex align-items-center gap-2" href="index.php">
+                        <img src="../img/maniva.png" alt="Logo Painel" class="logo-img" height="42px">
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -133,22 +148,19 @@ require "functions.php";
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="index.php">Home</a>
+                                <a class="<?= classeNav($secaoAtual, "home") ?>"<?= ariaNav($secaoAtual, "home") ?> href="index.php">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="cadastrar/categoria">Categoria</a>
+                                <a class="<?= classeNav($secaoAtual, "categoria") ?>"<?= ariaNav($secaoAtual, "categoria") ?> href="cadastrar/categoria">Categoria</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="cadastrar/grupo">Grupo</a>
+                                <a class="<?= classeNav($secaoAtual, "grupo") ?>"<?= ariaNav($secaoAtual, "grupo") ?> href="cadastrar/grupo">Grupo</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="cadastrar/usuario">Usuario</a>
+                                <a class="<?= classeNav($secaoAtual, "usuario") ?>"<?= ariaNav($secaoAtual, "usuario") ?> href="cadastrar/usuario">Usuario</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="cadastrar/produto">Produto</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="cadastrar/variacao">Variação</a>
+                                <a class="<?= classeNav($secaoAtual, "produto") ?>"<?= ariaNav($secaoAtual, "produto") ?> href="cadastrar/produto">Produto</a>
                             </li>
                         </ul>
                         <div class="d-flex">
@@ -157,7 +169,7 @@ require "functions.php";
                                     aria-expanded="false">
                                     Olá <?= htmlspecialchars($_SESSION["maniva"]["nome"] ?? '') ?>
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu dropdown-menu-end">
                                     <li><a class="dropdown-item" href="pages/sair">Sair</a></li>
                                 </ul>
                             </div>

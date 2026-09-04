@@ -33,45 +33,54 @@ function atualizarNavbarScroll() {
 window.addEventListener('scroll', atualizarNavbarScroll);
 document.addEventListener('DOMContentLoaded', atualizarNavbarScroll);
 
-// Alternar formulário entre Reclamação e Elogio
-function selecionarTipo(tipo) {
-  const tabRec = document.getElementById('tabReclamacao');
-  const tabElo = document.getElementById('tabElogio');
-  const loteBox = document.getElementById('loteBox');
-  const msgLabel = document.getElementById('msgLabel');
-  const msgInput = document.getElementById('msgInput');
-  const submitBtn = document.getElementById('submitBtn');
-  const tipoInput = document.getElementById('tipoMensagem');
-  const dataFab = document.getElementById('dataFabricacao');
-  const numLote = document.getElementById('numeroLote');
-
-  if (!tabRec || !tabElo) return;
-
-  if (tipo === 'elogio') {
-    tabRec.className = 'tab-btn inactive';
-    tabElo.className = 'tab-btn active-green';
-    if (loteBox) loteBox.style.display = 'none';
-    if (msgLabel) msgLabel.textContent = 'Descreva o elogio ou mensagem *';
-    if (msgInput) msgInput.placeholder = 'Conte-nos sua experiência...';
-    if (submitBtn) {
-      submitBtn.textContent = 'Enviar Elogio';
-      submitBtn.className = 'btn-enviar btn-enviar-elogio';
-    }
-    if (tipoInput) tipoInput.value = 'elogio';
-    if (dataFab) dataFab.required = false;
-    if (numLote) numLote.required = false;
-  } else {
-    tabRec.className = 'tab-btn active-red';
-    tabElo.className = 'tab-btn inactive';
-    if (loteBox) loteBox.style.display = '';
-    if (msgLabel) msgLabel.textContent = 'Descreva a reclamação *';
-    if (msgInput) msgInput.placeholder = 'Descreva o problema...';
-    if (submitBtn) {
-      submitBtn.textContent = 'Enviar Reclamação';
-      submitBtn.className = 'btn-enviar';
-    }
-    if (tipoInput) tipoInput.value = 'reclamacao';
-    if (dataFab) dataFab.required = true;
-    if (numLote) numLote.required = true;
+const vendedorPorRegiao = {
+  sul: {
+    vendedor: "Marcos (PR, SC, RS)",
+    whatsapp: "5541999999999", // Coloque o número real com DDI + DDD
+    mensagem: "Oi, gostaria de informações sobre os produtos da Maniva."
+  },
+  centroOeste: {
+    vendedor: "Tomaz (MT, MS, GO, DF)",
+    whatsapp: "5561999999999",
+    mensagem: "Oi, gostaria de informações sobre os produtos da Maniva."
+  },
+  norte: {
+    vendedor: "Pedro (Demais Estados)",
+    whatsapp: "5591999999999",
+    mensagem: "Oi, gostaria de informações sobre os produtos da Maniva."
   }
+};
+
+function selecionarRegiao() {
+  const seleciona = document.getElementById("regiao");
+  const regiao = seleciona ? seleciona.value : "";
+  const dadosVendas = document.getElementById("dadosVendas");
+
+  if (!dadosVendas) return;
+
+  if (!regiao) {
+    dadosVendas.innerHTML = "";
+    return;
+  }
+
+  let vendas;
+
+  if (["PR", "SC", "RS"].includes(regiao)) {
+    vendas = vendedorPorRegiao.sul;
+  } else if (["MT", "MS", "GO", "DF"].includes(regiao)) {
+    vendas = vendedorPorRegiao.centroOeste;
+  } else {
+    vendas = vendedorPorRegiao.norte;
+  }
+
+  const linksWhatsapp = `https://wa.me/${vendas.whatsapp}?text=${encodeURIComponent(vendas.mensagem)}`;
+  
+  dadosVendas.innerHTML = `
+    <p class="mb-2"><strong>${vendas.vendedor}</strong></p>
+    <a href="${linksWhatsapp}" target="_blank" class="text-decoration-none">
+      <button type="button" class="btn-maniva btn-maniva-black" style="max-width: 210px;">
+        Conversar no WhatsApp
+      </button>
+    </a>
+  `;
 }

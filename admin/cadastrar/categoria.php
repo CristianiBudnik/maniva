@@ -22,12 +22,12 @@
     <div class="card">
         <div class="card-header">
             <div class="float-start">
-                <h2>Cadastro de Categoria</h2>
+                <h2 class="titulo-categoria d-flex align-items-center">Cadastro de Categoria</h2>
             </div>
             <div class="float-end">
                 <a href="cadastrar/categoria" class="btn btn-success">
                     Nova Categoria</a>
-                <a href="listar/categoria" class="btn btn-success">
+                <a href="listar/categoria" class="btn btn-warning">
                     Listar Categorias
                 </a>
             </div>

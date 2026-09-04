@@ -1,6 +1,9 @@
 type DashboardResponse = {
     totalProdutos: number;
+    produtosDisponiveis?: number;
     produtos: Produto[];
+    categorias: Categoria[];
+    grupos: Grupo[];
 };
 
 type Produto = {
@@ -8,7 +11,19 @@ type Produto = {
     nome: string;
     descricao: string | null;
     imagem_url: string | null;
-    disponivel: boolean;
+    peso: string;
+    tipo_embalagem: string;
+    disponivel: boolean | number;
     categoria: string | null;
     grupo: string | null;
+};
+
+type Categoria = {
+    id: number;
+    nome: string;
+};
+
+type Grupo = {
+    id: number;
+    nome: string;
 };

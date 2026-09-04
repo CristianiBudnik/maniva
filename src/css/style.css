@@ -1,14 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
 :root {
-    --bg-body: #f4f6f9;
-    --card-bg: #ffffff;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
-    --primary: #3b82f6;
-    --success: #10b981;
-    --warning: #f59e0b;
-    --border-color: #e2e8f0;
-    --radius: 10px;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.07);
+    --verde-maniva: #1F6B3A;
+    --verde-escuro: #144927;
+    --amarelo-maniva: #F4C13A;
+    --fundo-pagina: #f8fafc;
+    --texto-principal: #1e293b;
+    --texto-secundario: #64748b;
+    --borda: #e2e8f0;
+    --sombra-card: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
 }
 
 * {
@@ -17,138 +17,221 @@
     padding: 0;
 }
 
-.img-logo{
-    height: 150px;
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--fundo-pagina);
+    color: var(--texto-principal);
+}
+
+/* ==========================================================================
+   Container Principal da Página
+   ========================================================================== */
+.dashboard-page {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 2.2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    border: 1px solid var(--borda);
+    margin-bottom: 3rem;
+}
+
+/* ==========================================================================
+   Header & Logo
+   ========================================================================== */
+.dashboard-page header {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--borda);
+    margin-bottom: 2rem;
+}
+
+.img-logo {
+    height: 90px;
+    width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.08));
+    transition: transform 0.3s ease;
+}
+
+.img-logo:hover {
+    transform: scale(1.05);
 }
 
 .dash-titulo {
-    color: var(--text-main);
     font-family: 'Poppins', sans-serif;
-    font-size: 70px;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--verde-maniva);
     display: flex;
-    justify-content: flex-start;
     align-items: center;
+    margin-left: 1rem;
 }
 
-body {
-    font-family: 'Inter', sans-serif;
-    background-color: var(--bg-body);
-    color: var(--text-main);
+.dash-titulo em.text-warning {
+    color: var(--amarelo-maniva) !important;
+    font-style: italic;
+    margin-left: 8px;
 }
 
-.dashboard-page {
-    max-width: 1000px;
-    margin: 0 auto;
+/* ==========================================================================
+   Botões de Ação Rápida no Topo
+   ========================================================================== */
+.btn-container {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    align-items: center;
+    background: transparent !important;
+    border: none !important;
+    padding: 0;
 }
 
+.btn-container .btn {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    padding: 0.65rem 1.2rem;
+    border-radius: 10px;
+    border: none;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+.btn-container .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+}
+
+/* ==========================================================================
+   Cards de Indicadores (Grid)
+   ========================================================================== */
 .cards-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
 }
 
 .card {
-    background-color: var(--card-bg);
-    padding: 20px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
+    background: #ffffff;
+    padding: 1.6rem 1.4rem;
+    border-radius: 14px;
+    box-shadow: var(--sombra-card);
+    border: 1px solid var(--borda);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.1);
 }
 
 .card-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--texto-secundario);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 8px;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.6rem;
 }
 
 .card-value {
-    font-size: 24px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
     font-weight: 700;
-    color: var(--text-main);
+    color: var(--texto-principal);
 }
 
-.card-total { border-top: 4px solid var(--primary); }
-.card-grupo { border-top: 4px solid var(--success); }
-.card-categoria { border-top: 4px solid var(--warning); }
+/* Cores de destaque nos topos dos cards */
+.card-total { border-top: 5px solid #3b82f6; }
+.card-categoria { border-top: 5px solid var(--amarelo-maniva); }
+.card-grupo { border-top: 5px solid var(--verde-maniva); }
+.card-1kg-papel-plastico { border-top: 5px solid #10b981; }
 
-
-.tabela-container {
-    background-color: var(--card-bg);
-    padding: 24px;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    border: 1px solid var(--border-color);
+/* ==========================================================================
+   Accordion & Tabelas
+   ========================================================================== */
+.accordion-item {
+    border: 1px solid var(--borda);
+    border-radius: 12px !important;
+    overflow: hidden;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
-.tabela-titulo {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 16px;
-}
-
-.table-responsive{
-    -webkit-overflow-scrolling: touch;
-    max-width: 100%;
-}
-
-.dashboard-page {
-    max-width: 100%;
-    overflow-x: hidden;
-}
-
-.dashboard-page table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-    font-size: 14px;
-}
-
-.dashboard-page thead {
-    background-color: #f8fafc;
-}
-
-.dashboard-page th {
-    padding: 12px 16px;
+.accordion-button {
+    font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    color: var(--text-muted);
-    border-bottom: 1px solid var(--border-color);
+    font-size: 1.05rem;
+    color: var(--texto-principal);
+    background-color: #ffffff;
+    padding: 1.2rem 1.5rem;
+    transition: all 0.2s ease;
 }
 
-.dashboard-page td {
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--border-color);
+.accordion-button:not(.collapsed) {
+    color: var(--verde-maniva);
+    background-color: #f1f8f3;
+    box-shadow: none;
+}
+
+.accordion-button:focus {
+    box-shadow: none;
+    border-color: var(--borda);
+}
+
+/* Tabelas dentro dos Accordions */
+.dashboard-page table {
+    margin-bottom: 0;
+    font-size: 0.92rem;
+}
+
+.dashboard-page thead th {
+    background-color: #f8fafc;
+    color: var(--texto-secundario);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid var(--borda);
+}
+
+.dashboard-page tbody td {
+    padding: 1rem 1.2rem;
+    color: var(--texto-principal);
+    vertical-align: middle;
+}
+
+.dashboard-page tbody tr {
+    transition: background-color 0.15s ease;
 }
 
 .dashboard-page tbody tr:hover {
     background-color: #f8fafc;
 }
 
-.btn-dash {
-    margin-top: 10px;
-    padding: 10px;
-    border-radius: 5px;
-    width: 50%;
-    margin-left: 25%;
-    text-align: center;
-    font-weight: bold;
-}
-
-@media (max-width: 600px) {
-    .cards-grid { grid-template-columns: 1fr; }
-
-    #tabela-listagem-produtos {
-        font-size: 13px;
+/* ==========================================================================
+   Responsividade (Mobile & Tablets)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .dash-titulo {
+        font-size: 1.6rem;
+        margin-left: 0.5rem;
+    }
+    
+    .img-logo {
+        height: 60px;
     }
 
-    #tabela-listagem-produtos th,
-    #tabela-listagem-produtos td {
-        padding: 8px 10px;
-        white-space: nowrap;
+    .btn-container {
+        justify-content: flex-start;
+        margin-top: 1rem;
+        flex-wrap: wrap;
     }
 
-    .dash-titulo {font-size: xxx-large;}
+    .cards-grid {
+        grid-template-columns: 1fr;
+    }
 }

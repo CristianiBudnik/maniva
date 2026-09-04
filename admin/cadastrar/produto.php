@@ -1,8 +1,9 @@
 <?php
    if (!isset($page)) exit;
 
-    $nome = $descricao = $imagem_url = "";
+    $nome = $descricao = $imagem_url = $peso = $tipo_embalagem = "";
     $categoria_id = "";
+    $disponivel = 1;
 
     if (!empty($id)) {
         $sql = "SELECT p.*, pc.categoria_id 
@@ -19,7 +20,9 @@
     $nome = $dados->nome ?? null;
     $descricao = $dados->descricao ?? null;
     $imagem_url = $dados->imagem_url ?? null;
-    $disponivel = $dados->disponivel ?? null;
+    $peso = $dados->peso ?? null;
+    $tipo_embalagem = $dados->tipo_embalagem ?? null;
+    $disponivel = $dados->disponivel ?? 1;
     $categoria_id = $dados->categoria_id ?? null;
 
 ?>
@@ -88,12 +91,37 @@
                         <label for="nome">Nome do Produto:</label>
                         <input type="text" name="nome" id="nome" class="form-control" required
                             data-parsley-required-message="Digite o nome do produto"
-                            value="<?= htmlspecialchars($nome) ?>">
+                            value="<?= htmlspecialchars($nome ?? '') ?>">
                     </div>
+
+                    <div class="col-12 col-md-4 mt-3">
+                        <label for="peso">Peso / Quantidade:</label>
+                        <input type="text" name="peso" id="peso" class="form-control" required
+                            placeholder="Ex: 1kg, 500g, 25kg"
+                            data-parsley-required-message="Digite o peso do produto"
+                            value="<?= htmlspecialchars($peso ?? '') ?>">
+                    </div>
+
+                    <div class="col-12 col-md-4 mt-3">
+                        <label for="tipo_embalagem">Tipo de Embalagem:</label>
+                        <input type="text" name="tipo_embalagem" id="tipo_embalagem" class="form-control" required
+                            placeholder="Ex: Embalagem Plástico, Embalagem Papel, Saco"
+                            data-parsley-required-message="Digite o tipo de embalagem"
+                            value="<?= htmlspecialchars($tipo_embalagem ?? '') ?>">
+                    </div>
+
+                    <div class="col-12 col-md-4 mt-3">
+                        <label for="ativo">Disponibilidade:</label>
+                        <select name="ativo" id="ativo" class="form-select">
+                            <option value="1" <?= (string)$disponivel === '1' ? 'selected' : '' ?>>Disponível</option>
+                            <option value="0" <?= (string)$disponivel === '0' ? 'selected' : '' ?>>Indisponível</option>
+                        </select>
+                    </div>
+
                     <div class="col-12 col-md-6 mt-3">
                         <label for="descricao">Descrição:</label>
                         <textarea name="descricao" id="descricao" class="form-control" required
-                            data-parsley-required-message="Digite a descrição"><?= htmlspecialchars($descricao) ?></textarea>
+                            data-parsley-required-message="Digite a descrição"><?= htmlspecialchars($descricao ?? '') ?></textarea>
                     </div>
                     <div class="col-12 col-md-6 mt-3">
                         <label for="imagem">Selecione a imagem do produto:</label>

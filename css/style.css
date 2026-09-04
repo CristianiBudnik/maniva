@@ -64,34 +64,6 @@ body.pagina-erro {
       transition: height .3s ease;
     }
 
-    .navbar-maniva .logo-circle {
-      width: 44px;
-      height: 44px;
-      background: #f4c21a;
-      color: #0e3a24;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Playfair Display', serif;
-      font-weight: 900;
-      font-size: 1.25rem;
-    }
-
-    .navbar-maniva .brand-text {
-      color: #fff;
-      font-family: 'Playfair Display', serif;
-      font-weight: 700;
-      font-size: 1.35rem;
-      letter-spacing: .5px;
-    }
-
-    .navbar-maniva .brand-text span {
-      color: #f4c21a;
-      font-style: italic;
-      font-weight: 700;
-    }
-
     .navbar-maniva .nav-link {
       color: #eef3ef !important;
       font-weight: 600;
@@ -396,6 +368,15 @@ body.pagina-erro {
       border: 1px solid rgba(255, 255, 255, .08);
       border-radius: 16px;
       padding: 2.2rem;
+    }
+
+    #vendas{
+      background: #f4c21a;
+      color: #0e3a24;
+      margin-bottom: 2rem;
+      padding: 1rem;
+      font-weight: 600;
+      border-radius: 8px;
     }
 
     .tab-toggle {

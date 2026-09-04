@@ -1,4 +1,5 @@
 "use strict";
+//função assíncrona para carregar os dados do dashboard
 async function carregarDashboard() {
     try {
         const resposta = await fetch('../api/dashboard.php');
@@ -8,42 +9,54 @@ async function carregarDashboard() {
         const dados = await resposta.json();
         atualizarCards(dados);
         exibirTabela(dados.produtos);
+        exibirTabelaCategoria(dados.categorias);
+        exibirTabelaGrupos(dados.grupos);
     }
     catch (erro) {
         console.error('Falha ao carregar produtos:', erro);
     }
 }
+//filtro de produtos disponíveis
+const totalProdutosDisponiveis = (dados) => {
+    const estaDisponiveis = dados.produtos.filter((produto) => Number(produto.disponivel) === 1)
+        .reduce((acumulador) => acumulador + 1, 0);
+    return estaDisponiveis;
+};
+//conta de total de categorias
+const totalCategorias = (dados) => {
+    const categorias = dados.categorias
+        .map((categoria) => categoria.nome);
+    return categorias.length;
+};
+//conta de total de grupos
+const totalGrupos = (dados) => {
+    const grupos = dados.grupos
+        .map((grupo) => grupo.nome);
+    return grupos.length;
+};
 function atualizarCards(dados) {
-    const elTotal = document.getElementById('card-total');
-    const elGrupo = document.getElementById('card-grupo');
-    const elCategoria = document.getElementById('card-categoria');
-    if (elTotal)
-        elTotal.innerText = dados.totalProdutos.toString();
-    if (dados.produtos.length === 0) {
-        if (elGrupo)
-            elGrupo.innerText = '—';
-        if (elCategoria)
-            elCategoria.innerText = '—';
-        return;
+    const pegaTotal = document.getElementById('card-total');
+    const pegaGrupo = document.getElementById('card-grupo');
+    const pegaCategoria = document.getElementById('card-categoria');
+    const pegaDisponiveis = document.getElementById('card-produto-disponivel');
+    // Card total de produtos
+    if (pegaTotal) {
+        pegaTotal.innerText = dados.totalProdutos.toString();
     }
-    // Conta quantos produtos cada grupo/categoria tem, usando reduce
-    const contagemGrupo = dados.produtos.reduce((acc, p) => {
-        const chave = p.grupo ?? 'Sem grupo';
-        acc[chave] = (acc[chave] ?? 0) + 1;
-        return acc;
-    }, {});
-    const contagemCategoria = dados.produtos.reduce((acc, p) => {
-        const chave = p.categoria ?? 'Sem categoria';
-        acc[chave] = (acc[chave] ?? 0) + 1;
-        return acc;
-    }, {});
-    const grupoTop = Object.entries(contagemGrupo).sort((a, b) => b[1] - a[1])[0];
-    const categoriaTop = Object.entries(contagemCategoria).sort((a, b) => b[1] - a[1])[0];
-    if (elGrupo)
-        elGrupo.innerText = `${grupoTop[0]} (${grupoTop[1]})`;
-    if (elCategoria)
-        elCategoria.innerText = `${categoriaTop[0]} (${categoriaTop[1]})`;
+    // Card produtos disponíveis
+    if (pegaDisponiveis) {
+        pegaDisponiveis.innerText = totalProdutosDisponiveis(dados).toString();
+    }
+    // Card grupos
+    if (pegaGrupo) {
+        pegaGrupo.innerText = totalGrupos(dados).toString();
+    }
+    // Card categorias
+    if (pegaCategoria) {
+        pegaCategoria.innerText = totalCategorias(dados).toString();
+    }
 }
+//exibindo os produtos
 function exibirTabela(produtos) {
     const tbody = document.getElementById('tabela-produtos-body');
     if (!tbody)
@@ -53,7 +66,7 @@ function exibirTabela(produtos) {
         tbody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum produto cadastrado.</td></tr>';
         return;
     }
-    produtos.forEach((item) => {
+    const executaLinhas = produtos.map((item) => {
         const tr = document.createElement('tr');
         const statusBadge = Number(item.disponivel) === 1
             ? '<span class="badge bg-success">Disponível</span>'
@@ -65,8 +78,47 @@ function exibirTabela(produtos) {
             <td>${item.categoria ?? '—'}</td>
             <td>${statusBadge}</td>
         `;
-        tbody.appendChild(tr);
+        return tr;
     });
+    executaLinhas.forEach((tr) => tbody.appendChild(tr));
+}
+function exibirTabelaCategoria(categorias) {
+    const tbody = document.getElementById('tabela-categorias-body');
+    if (!tbody)
+        return;
+    tbody.innerHTML = '';
+    if (categorias.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" class="text-center">Nenhuma categoria cadastrada.</td></tr>';
+        return;
+    }
+    const executaLinhas = categorias.map((item) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.nome}</td>
+        `;
+        return tr;
+    });
+    executaLinhas.forEach((tr) => tbody.appendChild(tr));
+}
+function exibirTabelaGrupos(grupos) {
+    const tbody = document.getElementById('tabela-grupos-body');
+    if (!tbody)
+        return;
+    tbody.innerHTML = '';
+    if (grupos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="2" class="text-center">Nenhum grupo cadastrado.</td></tr>';
+        return;
+    }
+    const executaLinhas = grupos.map((item) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.nome}</td>
+        `;
+        return tr;
+    });
+    executaLinhas.forEach((tr) => tbody.appendChild(tr));
 }
 document.addEventListener('DOMContentLoaded', () => {
     carregarDashboard();
