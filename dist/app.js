@@ -1,8 +1,9 @@
 "use strict";
 //função assíncrona para carregar os dados do dashboard
-async function carregarDashboard() {
+async function carregarDashboard(busca) {
     try {
-        const resposta = await fetch('../api/dashboard.php');
+        const url = busca ? `../api/dashboard.php?busca=${encodeURIComponent(busca)}` : '../api/dashboard.php';
+        const resposta = await fetch(url);
         if (!resposta.ok) {
             throw new Error(`Erro na requisição: Status ${resposta.status}`);
         }
@@ -17,10 +18,10 @@ async function carregarDashboard() {
     }
 }
 //filtro de produtos disponíveis
-const totalProdutosDisponiveis = (dados) => {
-    const estaDisponiveis = dados.produtos.filter((produto) => Number(produto.disponivel) === 1)
-        .reduce((acumulador) => acumulador + 1, 0);
-    return estaDisponiveis;
+const totalProdutosDisponiveis = (produtos) => {
+    return produtos
+        .filter((produto) => Number(produto.disponivel) === 1)
+        .reduce((acumulador, _) => acumulador + 1, 0);
 };
 //conta de total de categorias
 const totalCategorias = (dados) => {
@@ -34,18 +35,32 @@ const totalGrupos = (dados) => {
         .map((grupo) => grupo.nome);
     return grupos.length;
 };
+function formataTabela(produtos) {
+    return produtos.map((produto) => {
+        return {
+            id: produto.id,
+            nome: produto.nome,
+            grupo: produto.grupo || '—',
+            categoria: produto.categoria || '—',
+            statusBadge: Number(produto.disponivel) === 1
+                ? '<span class="badge bg-success">Disponível</span>'
+                : '<span class="badge bg-danger">Indisponível</span>',
+        };
+    });
+}
 function atualizarCards(dados) {
     const pegaTotal = document.getElementById('card-total');
     const pegaGrupo = document.getElementById('card-grupo');
     const pegaCategoria = document.getElementById('card-categoria');
     const pegaDisponiveis = document.getElementById('card-produto-disponivel');
+    const pegaCategoriaMaisProdutos = document.getElementById('card-categoria-destaque');
     // Card total de produtos
     if (pegaTotal) {
         pegaTotal.innerText = dados.totalProdutos.toString();
     }
     // Card produtos disponíveis
     if (pegaDisponiveis) {
-        pegaDisponiveis.innerText = totalProdutosDisponiveis(dados).toString();
+        pegaDisponiveis.innerText = totalProdutosDisponiveis(dados.produtos).toString();
     }
     // Card grupos
     if (pegaGrupo) {
@@ -54,6 +69,10 @@ function atualizarCards(dados) {
     // Card categorias
     if (pegaCategoria) {
         pegaCategoria.innerText = totalCategorias(dados).toString();
+    }
+    if (pegaCategoriaMaisProdutos) {
+        const destaque = destaqueCategoria(dados.produtos);
+        pegaCategoriaMaisProdutos.innerText = `${destaque.nome}`;
     }
 }
 //exibindo os produtos
@@ -66,21 +85,19 @@ function exibirTabela(produtos) {
         tbody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum produto cadastrado.</td></tr>';
         return;
     }
-    const executaLinhas = produtos.map((item) => {
+    // Usando a sua função de formatação com map:
+    const formatados = formataTabela(produtos);
+    formatados.forEach((item) => {
         const tr = document.createElement('tr');
-        const statusBadge = Number(item.disponivel) === 1
-            ? '<span class="badge bg-success">Disponível</span>'
-            : '<span class="badge bg-danger">Indisponível</span>';
         tr.innerHTML = `
             <td>${item.id}</td>
             <td>${item.nome}</td>
-            <td>${item.grupo ?? '—'}</td>
-            <td>${item.categoria ?? '—'}</td>
-            <td>${statusBadge}</td>
+            <td>${item.grupo}</td>
+            <td>${item.categoria}</td>
+            <td>${item.statusBadge}</td>
         `;
-        return tr;
+        tbody.appendChild(tr);
     });
-    executaLinhas.forEach((tr) => tbody.appendChild(tr));
 }
 function exibirTabelaCategoria(categorias) {
     const tbody = document.getElementById('tabela-categorias-body');
@@ -122,4 +139,30 @@ function exibirTabelaGrupos(grupos) {
 }
 document.addEventListener('DOMContentLoaded', () => {
     carregarDashboard();
+    const buscar = document.getElementById('filtro-busca');
+    buscar?.addEventListener('input', () => {
+        carregarDashboard(buscar.value.trim());
+    });
 });
+const destaqueCategoria = (produtos) => {
+    if (produtos.length === 0) {
+        return { nome: 'Não existe nenhum registro!', total: 0 };
+    }
+    const disponiveis = {};
+    for (const produto of produtos) {
+        const categoria = produto.categoria || 'Não tem categoria';
+        disponiveis[categoria] = (disponiveis[categoria] || 0) + 1;
+    }
+    let categoriaComMaisProdutos = 'Não tem categoria';
+    let categoriaComMaisQuantidade = 0;
+    for (const [categoria, quantidade] of Object.entries(disponiveis)) {
+        if (quantidade > categoriaComMaisQuantidade) {
+            categoriaComMaisProdutos = categoria;
+            categoriaComMaisQuantidade = quantidade;
+        }
+    }
+    return {
+        nome: categoriaComMaisProdutos,
+        total: categoriaComMaisQuantidade,
+    };
+};

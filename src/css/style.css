@@ -148,6 +148,7 @@ body {
 .card-categoria { border-top: 5px solid var(--amarelo-maniva); }
 .card-grupo { border-top: 5px solid var(--verde-maniva); }
 .card-1kg-papel-plastico { border-top: 5px solid #10b981; }
+.card-destaque { border-top: 5px solid var(--verde-escuro); }
 
 /* ==========================================================================
    Accordion & Tabelas

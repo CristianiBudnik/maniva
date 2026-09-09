@@ -40,6 +40,10 @@ if (!isset($page))
             <div class="card-label">Produtos disponiveis</div>
             <div id="card-produto-disponivel" class="card-value">Carregando...</div>
         </div>
+        <div class="card card-destaque">
+            <div class="card-label">Categoria com mais produtos</div>
+            <div id="card-categoria-destaque" class="card-value">Carregando...</div>
+        </div>
     </div>
     <br>
     <div class="accordion" id="accordionDashboard">
@@ -53,6 +57,10 @@ if (!isset($page))
             <div id="collapse-produtos" class="accordion-collapse collapse" aria-labelledby="heading-produtos"
                 data-bs-parent="#accordionDashboard">
                 <div class="accordion-body p-0">
+                    <div class="p-3">
+                        <input type="text" id="filtro-busca" class="form-control form-control-sm"
+                            placeholder="Buscar por nome ou descrição...">
+                    </div>
                     <div class="table-responsive">
                         <table id="tabela-listagem-produtos"
                             class="table table-bordered table-striped table-hover align-middle mb-0">

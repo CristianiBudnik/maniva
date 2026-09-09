@@ -6,6 +6,11 @@ type DashboardResponse = {
     grupos: Grupo[];
 };
 
+type Destaque = {
+    nome: string;
+    total: number;
+}
+
 type Produto = {
     id: number;
     nome: string;

@@ -12,9 +12,14 @@ try {
     $kpis = $stmtGeral->fetch(PDO::FETCH_OBJ);
     $stmtGeral->closeCursor();
 
-    // 2. Consulta dos produtos pela View Analítica
-    $sqlProdutos = "SELECT id, nome, descricao, imagem_url, peso, tipo_embalagem, disponivel, categoria, grupo FROM vw_produtos_dashboard ORDER BY nome";
-    $produtos = $pdo->query($sqlProdutos)->fetchAll(PDO::FETCH_OBJ);
+    // 2. Consulta dos produtos via Stored Procedure (busca opcional pelo parâmetro "busca")
+    $busca = (isset($_GET['busca']) && trim($_GET['busca']) !== '') ? trim($_GET['busca']) : null;
+
+    $stmtProdutos = $pdo->prepare("CALL sp_produtos_dashboard(:busca, NULL, 1000, 0)");
+    $stmtProdutos->bindValue(':busca', $busca, $busca === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+    $stmtProdutos->execute();
+    $produtos = $stmtProdutos->fetchAll(PDO::FETCH_OBJ);
+    $stmtProdutos->closeCursor();
 
     // 3. Consulta das categorias pela View Analítica
     $sqlCategorias = "SELECT id, nome FROM vw_categoria_dashboard ORDER BY nome";

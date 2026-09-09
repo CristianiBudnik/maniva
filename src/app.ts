@@ -1,7 +1,9 @@
 //função assíncrona para carregar os dados do dashboard
-async function carregarDashboard(): Promise<void> {
+async function carregarDashboard(busca?: string): Promise<void> {
     try {
-        const resposta = await fetch('../api/dashboard.php');
+
+        const url = busca ? `../api/dashboard.php?busca=${encodeURIComponent(busca)}` : '../api/dashboard.php';
+        const resposta = await fetch(url);
 
         if (!resposta.ok) {
             throw new Error(`Erro na requisição: Status ${resposta.status}`);
@@ -20,10 +22,10 @@ async function carregarDashboard(): Promise<void> {
 }
 
 //filtro de produtos disponíveis
-const totalProdutosDisponiveis = (dados: DashboardResponse): number => {
-    const estaDisponiveis = dados.produtos.filter((produto) => Number(produto.disponivel) === 1)
-        .reduce((acumulador) => acumulador + 1, 0);
-    return estaDisponiveis;
+const totalProdutosDisponiveis = (produtos: Produto[]): number => {
+    return produtos
+        .filter((produto) => Number(produto.disponivel) === 1)
+        .reduce((acumulador, _) => acumulador + 1, 0);
 };
 
 //conta de total de categorias
@@ -42,12 +44,35 @@ const totalGrupos = (dados: DashboardResponse): number => {
     return grupos.length;
 };
 
+type formataProduto = {
+    id: number;
+    nome: string;
+    grupo: string;
+    categoria: string;
+    statusBadge: string;
+}
+
+function formataTabela(produtos: Produto[]): formataProduto[] {
+    return produtos.map((produto) => {
+        return {
+            id: produto.id,
+            nome: produto.nome,
+            grupo: produto.grupo || '—',
+            categoria: produto.categoria || '—',
+            statusBadge: Number(produto.disponivel) === 1
+                ? '<span class="badge bg-success">Disponível</span>'
+                : '<span class="badge bg-danger">Indisponível</span>',
+        };
+    });
+}
+
 function atualizarCards(dados: DashboardResponse): void {
 
     const pegaTotal = document.getElementById('card-total');
     const pegaGrupo = document.getElementById('card-grupo');
     const pegaCategoria = document.getElementById('card-categoria');
     const pegaDisponiveis = document.getElementById('card-produto-disponivel');
+    const pegaCategoriaMaisProdutos = document.getElementById('card-categoria-destaque');
 
     // Card total de produtos
     if (pegaTotal) {
@@ -55,7 +80,7 @@ function atualizarCards(dados: DashboardResponse): void {
     }
     // Card produtos disponíveis
     if (pegaDisponiveis) {
-        pegaDisponiveis.innerText = totalProdutosDisponiveis(dados).toString();
+        pegaDisponiveis.innerText = totalProdutosDisponiveis(dados.produtos).toString();
     }
     // Card grupos
     if (pegaGrupo) {
@@ -64,6 +89,11 @@ function atualizarCards(dados: DashboardResponse): void {
     // Card categorias
     if (pegaCategoria) {
         pegaCategoria.innerText = totalCategorias(dados).toString();
+    }
+
+    if (pegaCategoriaMaisProdutos) {
+        const destaque = destaqueCategoria(dados.produtos);
+        pegaCategoriaMaisProdutos.innerText = `${destaque.nome}`;
     }
 }
 
@@ -79,24 +109,22 @@ function exibirTabela(produtos: Produto[]): void {
         return;
     }
 
-    const executaLinhas = produtos.map((item) => {
-        const tr = document.createElement('tr');
-        const statusBadge = Number(item.disponivel) === 1
-            ? '<span class="badge bg-success">Disponível</span>'
-            : '<span class="badge bg-danger">Indisponível</span>';
+    // Usando a sua função de formatação com map:
+    const formatados = formataTabela(produtos);
 
+    formatados.forEach((item) => {
+        const tr = document.createElement('tr');
         tr.innerHTML = `
             <td>${item.id}</td>
             <td>${item.nome}</td>
-            <td>${item.grupo ?? '—'}</td>
-            <td>${item.categoria ?? '—'}</td>
-            <td>${statusBadge}</td>
+            <td>${item.grupo}</td>
+            <td>${item.categoria}</td>
+            <td>${item.statusBadge}</td>
         `;
-        return tr;
+        tbody.appendChild(tr);
     });
-
-    executaLinhas.forEach((tr) => tbody.appendChild(tr));
 }
+
 
 function exibirTabelaCategoria(categorias: Categoria[]): void {
     const tbody = document.getElementById('tabela-categorias-body');
@@ -147,4 +175,37 @@ function exibirTabelaGrupos(grupos: Grupo[]): void {
 
 document.addEventListener('DOMContentLoaded', () => {
     carregarDashboard();
+
+    const buscar = document.getElementById('filtro-busca') as HTMLInputElement | null;
+    buscar?.addEventListener('input', () => {
+        carregarDashboard(buscar.value.trim());
+    });
 });
+
+const destaqueCategoria = (produtos: Produto[]): Destaque => {
+    if (produtos.length === 0) {
+        return { nome: 'Não existe nenhum registro!', total: 0 };
+    }
+
+    const disponiveis: Record<string, number> = {};
+    for (const produto of produtos) {
+        const categoria = produto.categoria || 'Não tem categoria';
+        disponiveis[categoria] = (disponiveis[categoria] || 0) + 1;
+    }
+
+    let categoriaComMaisProdutos = 'Não tem categoria';
+    let categoriaComMaisQuantidade = 0;
+
+    for (const [categoria, quantidade] of Object.entries(disponiveis)) {
+        if (quantidade > categoriaComMaisQuantidade) {
+            categoriaComMaisProdutos = categoria;
+            categoriaComMaisQuantidade = quantidade;
+        }
+    }
+
+    return {
+        nome: categoriaComMaisProdutos,
+        total: categoriaComMaisQuantidade,
+    };
+};
+    

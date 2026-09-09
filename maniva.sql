@@ -222,7 +222,7 @@ SELECT
     COALESCE(mc.produtos_disponiveis, 0) AS produtos_disponiveis
 FROM categoria c
 LEFT JOIN grupo g ON g.id = c.grupo_id
-LEFT JOIN cte_metricas_categoria mc ON mc.categoria_id = c.id;
+LEFT JOIN cte_categoria_dados mc ON mc.categoria_id = c.id;
 
 -- View Analítica de Grupos (Dashboard), faz a junção das tabelas grupo, categoria e produto, para serem usadas na dashboard
 CREATE OR REPLACE VIEW `vw_grupo_dashboard` AS
@@ -375,3 +375,7 @@ FROM produto p
 INNER JOIN produto_categoria pc ON pc.produto_id = p.id
 INNER JOIN categoria c ON c.id = pc.categoria_id
 INNER JOIN grupo g ON g.id = c.grupo_id;
+
+SELECT * FROM vw_categoria_dashboard;
+
+SELECT id, nome, total_produtos, produtos_disponiveis FROM vw_categoria_dashboard;
