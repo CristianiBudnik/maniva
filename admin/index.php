@@ -1,9 +1,6 @@
 <?php
 
-//iniciar sessao
 session_start();
-
-//conectar no banco
 
 require "../config.php";
 require "functions.php";
@@ -103,14 +100,13 @@ require "functions.php";
             echo "<script>mensagem('Dados Inválidos','error');</script>";
             exit;
         }
-        //registyra sessao
+      
         $_SESSION["maniva"] = array(
             "id" => $dadosUsuario->id,
             "nome" => $dadosUsuario->nome,
             "email" => $dadosUsuario->email
         );
 
-        //redireciona a página
         echo "<script>location.href='index.php';</script>";
 
     } else if (!isset($_SESSION["maniva"])) {
@@ -118,12 +114,10 @@ require "functions.php";
         include "pages/login.php";
 
     } else {
-        //mostrar a tela do sistema
 
-        //descobre qual "seção" está ativa a partir da rota atual (?param=)
         $paramAtual  = $_GET["param"] ?? "pages/home";
         $partesAtual = explode("/", $paramAtual);
-        $secaoAtual  = $partesAtual[1] ?? $partesAtual[0]; // ex: cadastrar/categoria -> categoria | pages/home -> home
+        $secaoAtual  = $partesAtual[1] ?? $partesAtual[0]; 
 
         function classeNav($secaoAtual, $secao)
         {

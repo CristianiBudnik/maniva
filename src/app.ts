@@ -1,4 +1,3 @@
-//função assíncrona para carregar os dados do dashboard
 async function carregarDashboard(busca?: string): Promise<void> {
     try {
 
@@ -21,14 +20,12 @@ async function carregarDashboard(busca?: string): Promise<void> {
     }
 }
 
-//filtro de produtos disponíveis
 const totalProdutosDisponiveis = (produtos: Produto[]): number => {
     return produtos
         .filter((produto) => Number(produto.disponivel) === 1)
         .reduce((acumulador, _) => acumulador + 1, 0);
 };
 
-//conta de total de categorias
 const totalCategorias = (dados: DashboardResponse): number => {
     const categorias = dados.categorias
         .map((categoria) => categoria.nome);
@@ -36,7 +33,6 @@ const totalCategorias = (dados: DashboardResponse): number => {
     return categorias.length;
 };
 
-//conta de total de grupos
 const totalGrupos = (dados: DashboardResponse): number => {
     const grupos = dados.grupos
         .map((grupo) => grupo.nome);
@@ -73,20 +69,17 @@ function atualizarCards(dados: DashboardResponse): void {
     const pegaCategoria = document.getElementById('card-categoria');
     const pegaDisponiveis = document.getElementById('card-produto-disponivel');
     const pegaCategoriaMaisProdutos = document.getElementById('card-categoria-destaque');
+    const pegaGrupoMaisProdutos = document.getElementById('card-grupo-destaque');
 
-    // Card total de produtos
     if (pegaTotal) {
         pegaTotal.innerText = dados.totalProdutos.toString();
     }
-    // Card produtos disponíveis
     if (pegaDisponiveis) {
         pegaDisponiveis.innerText = totalProdutosDisponiveis(dados.produtos).toString();
     }
-    // Card grupos
     if (pegaGrupo) {
         pegaGrupo.innerText = totalGrupos(dados).toString();
     }
-    // Card categorias
     if (pegaCategoria) {
         pegaCategoria.innerText = totalCategorias(dados).toString();
     }
@@ -95,9 +88,13 @@ function atualizarCards(dados: DashboardResponse): void {
         const destaque = destaqueCategoria(dados.produtos);
         pegaCategoriaMaisProdutos.innerText = `${destaque.nome}`;
     }
+
+    if (pegaGrupoMaisProdutos) {
+        const destaque = destaqueGrupo(dados.produtos);
+        pegaGrupoMaisProdutos.innerText = `${destaque.nome}`;
+    }
 }
 
-//exibindo os produtos
 function exibirTabela(produtos: Produto[]): void {
     const tbody = document.getElementById('tabela-produtos-body');
     if (!tbody) return;
@@ -109,7 +106,6 @@ function exibirTabela(produtos: Produto[]): void {
         return;
     }
 
-    // Usando a sua função de formatação com map:
     const formatados = formataTabela(produtos);
 
     formatados.forEach((item) => {
@@ -149,6 +145,7 @@ function exibirTabelaCategoria(categorias: Categoria[]): void {
 
     executaLinhas.forEach((tr) => tbody.appendChild(tr));
 }
+
 
 function exibirTabelaGrupos(grupos: Grupo[]): void {
     const tbody = document.getElementById('tabela-grupos-body');
@@ -208,4 +205,30 @@ const destaqueCategoria = (produtos: Produto[]): Destaque => {
         total: categoriaComMaisQuantidade,
     };
 };
-    
+
+const destaqueGrupo = (produtos: Produto[]): Destaque => {
+    if (produtos.length === 0) {
+        return { nome: 'Não existe nenhum registro!', total: 0 };
+    }
+
+    const disponiveis: Record<string, number> = {};
+    for (const produto of produtos) {
+        const grupo = produto.grupo || 'Não tem grupo';
+        disponiveis[grupo] = (disponiveis[grupo] || 0) + 1;
+    }
+
+    let grupoComMaisProdutos = 'Não tem grupo';
+    let grupoComMaisQuantidade = 0;
+
+    for (const [grupo, quantidade] of Object.entries(disponiveis)) {
+        if (quantidade > grupoComMaisQuantidade) {
+            grupoComMaisProdutos = grupo;
+            grupoComMaisQuantidade = quantidade;
+        }
+    }
+
+    return {
+        nome: grupoComMaisProdutos,
+        total: grupoComMaisQuantidade,
+    };
+};

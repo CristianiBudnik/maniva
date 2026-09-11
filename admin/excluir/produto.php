@@ -9,20 +9,18 @@ if (empty($id)) {
 }
 
 try {
-    // Busca a imagem antes de excluir
+    
     $sqlFoto = "SELECT imagem_url FROM produto WHERE id = :id LIMIT 1";
     $consultaFoto = $pdo->prepare($sqlFoto);
     $consultaFoto->bindParam(":id", $id);
     $consultaFoto->execute();
     $foto = $consultaFoto->fetchColumn();
 
-    // Remove vínculo na tabela associativa
     $sqlPC = "DELETE FROM produto_categoria WHERE produto_id = :id";
     $consultaPC = $pdo->prepare($sqlPC);
     $consultaPC->bindParam(":id", $id);
     $consultaPC->execute();
 
-    // Exclui o produto
     $sqlDelete = "DELETE FROM produto WHERE id = :id LIMIT 1";
     $consultaDelete = $pdo->prepare($sqlDelete);
     $consultaDelete->bindParam(":id", $id);

@@ -50,7 +50,7 @@
                     $dadosListar = $consultaListar->fetchAll(PDO::FETCH_OBJ);
 
                     foreach ($dadosListar as $dados) {
-                        // Caminho da imagem ou imagem padrão
+                        
                         $foto = !empty($dados->imagem_url) ? "../arquivos/{$dados->imagem_url}" : "../img/sem-foto.png";
                     ?>
                         <tr>

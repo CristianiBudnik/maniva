@@ -35,7 +35,7 @@
             <div class="float-end">
                 <a href="cadastrar/produto" class="btn btn-success">
                     Novo Registro</a>
-                <a href="listar/produto" class="btn btn-success">
+                <a href="listar/produto" class="btn btn-warning">
                     Listar Registros
                 </a>
             </div>

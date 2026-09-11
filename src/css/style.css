@@ -1,16 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
 
-:root {
-    --verde-maniva: #1F6B3A;
-    --verde-escuro: #144927;
-    --amarelo-maniva: #F4C13A;
-    --fundo-pagina: #f8fafc;
-    --texto-principal: #1e293b;
-    --texto-secundario: #64748b;
-    --borda: #e2e8f0;
-    --sombra-card: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-}
-
 * {
     box-sizing: border-box;
     margin: 0;
@@ -19,28 +8,22 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background-color: var(--fundo-pagina);
-    color: var(--texto-principal);
+    background-color: #F7F5EF;
+    color: #1E2A1B;
 }
 
-/* ==========================================================================
-   Container Principal da Página
-   ========================================================================== */
 .dashboard-page {
     background: #ffffff;
-    border-radius: 16px;
-    padding: 2.2rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
-    border: 1px solid var(--borda);
+    border-radius: 18px;
+    padding: 2.4rem;
+    box-shadow: 0 1px 2px rgba(30, 42, 27, 0.04), 0 12px 32px -12px rgba(30, 42, 27, 0.10);
+    border: 1px solid #e7e3d8;
     margin-bottom: 3rem;
 }
 
-/* ==========================================================================
-   Header & Logo
-   ========================================================================== */
 .dashboard-page header {
     padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--borda);
+    border-bottom: 1px solid #e7e3d8;
     margin-bottom: 2rem;
 }
 
@@ -48,7 +31,7 @@ body {
     height: 90px;
     width: auto;
     object-fit: contain;
-    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.08));
+    filter: drop-shadow(0 4px 6px rgba(30, 42, 27, 0.10));
     transition: transform 0.3s ease;
 }
 
@@ -60,21 +43,19 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 2.2rem;
     font-weight: 700;
-    color: var(--verde-maniva);
+    color: #1F6B3A;
     display: flex;
     align-items: center;
     margin-left: 1rem;
+    letter-spacing: -0.01em;
 }
 
 .dash-titulo em.text-warning {
-    color: var(--amarelo-maniva) !important;
+    color: #C98A1B !important;
     font-style: italic;
     margin-left: 8px;
 }
 
-/* ==========================================================================
-   Botões de Ação Rápida no Topo
-   ========================================================================== */
 .btn-container {
     display: flex;
     gap: 12px;
@@ -88,51 +69,70 @@ body {
 .btn-container .btn {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 0.9rem;
-    padding: 0.65rem 1.2rem;
+    font-size: 0.88rem;
+    padding: 0.68rem 1.25rem;
     border-radius: 10px;
     border: none;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    color: #ffffff;
+    transition: all 0.2s ease;
+    box-shadow: 0 3px 8px rgba(30, 42, 27, 0.10);
 }
 
 .btn-container .btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 16px rgba(30, 42, 27, 0.16);
 }
 
-/* ==========================================================================
-   Cards de Indicadores (Grid)
-   ========================================================================== */
+.btn-container .btn-primary {
+    background-color: #1F6B3A;
+}
+.btn-container .btn-primary:hover {
+    background-color: #185530;
+}
+
+.btn-container .btn-warning {
+    background-color: #F4C13A;
+    color: #3A2A05;
+}
+.btn-container .btn-warning:hover {
+    background-color: #e0ad24;
+}
+
+.btn-container .btn-success {
+    background-color: #144927;
+}
+.btn-container .btn-success:hover {
+    background-color: #0d3319;
+}
+
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2.5rem;
+    gap: 1.4rem;
+    margin-bottom: 2rem;
 }
 
 .card {
     background: #ffffff;
-    padding: 1.6rem 1.4rem;
+    padding: 1.5rem 1.4rem;
     border-radius: 14px;
-    box-shadow: var(--sombra-card);
-    border: 1px solid var(--borda);
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 1px 2px rgba(30, 42, 27, 0.04), 0 6px 18px -8px rgba(30, 42, 27, 0.10);
+    border: 1px solid #ece8dc;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     position: relative;
     overflow: hidden;
 }
 
 .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 15px 30px -8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 1px 2px rgba(30, 42, 27, 0.04), 0 14px 28px -10px rgba(30, 42, 27, 0.16);
 }
 
 .card-label {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--texto-secundario);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #7A7362;
+    letter-spacing: 0.02em;
     margin-bottom: 0.6rem;
 }
 
@@ -140,68 +140,83 @@ body {
     font-family: 'Poppins', sans-serif;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--texto-principal);
+    color: #1E2A1B;
 }
 
-/* Cores de destaque nos topos dos cards */
-.card-total { border-top: 5px solid #3b82f6; }
-.card-categoria { border-top: 5px solid var(--amarelo-maniva); }
-.card-grupo { border-top: 5px solid var(--verde-maniva); }
-.card-1kg-papel-plastico { border-top: 5px solid #10b981; }
-.card-destaque { border-top: 5px solid var(--verde-escuro); }
+.card-total { border-top: 4px solid #1F6B3A; }
+.card-categoria { border-top: 4px solid #F4C13A; }
+.card-grupo { border-top: 4px solid #144927; }
+.card-1kg-papel-plastico { border-top: 4px solid #C1622D; }
 
-/* ==========================================================================
-   Accordion & Tabelas
-   ========================================================================== */
+.card-destaque {
+    border-top: none;
+    background: linear-gradient(135deg, #144927 0%, #1F6B3A 100%);
+    grid-column: span 2;
+}
+
+.card-destaque .card-label {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.card-destaque .card-value {
+    color: #F4C13A;
+    font-size: 2.2rem;
+}
+
+
+@media (max-width: 640px) {
+    .card-destaque {
+        grid-column: span 1;
+    }
+}
+
 .accordion-item {
-    border: 1px solid var(--borda);
+    border: 1px solid #e7e3d8;
     border-radius: 12px !important;
     overflow: hidden;
-    margin-bottom: 1.2rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    margin-bottom: 1.1rem;
+    box-shadow: 0 1px 2px rgba(30, 42, 27, 0.03);
 }
 
 .accordion-button {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 1.05rem;
-    color: var(--texto-principal);
+    font-size: 1.02rem;
+    color: #1E2A1B;
     background-color: #ffffff;
-    padding: 1.2rem 1.5rem;
+    padding: 1.1rem 1.5rem;
     transition: all 0.2s ease;
 }
 
 .accordion-button:not(.collapsed) {
-    color: var(--verde-maniva);
-    background-color: #f1f8f3;
+    color: #1F6B3A;
+    background-color: #F1F7F0;
     box-shadow: none;
 }
 
 .accordion-button:focus {
     box-shadow: none;
-    border-color: var(--borda);
+    border-color: #e7e3d8;
 }
 
-/* Tabelas dentro dos Accordions */
 .dashboard-page table {
     margin-bottom: 0;
     font-size: 0.92rem;
 }
 
 .dashboard-page thead th {
-    background-color: #f8fafc;
-    color: var(--texto-secundario);
+    background-color: #FAF8F2;
+    color: #7A7362;
     font-weight: 600;
-    text-transform: uppercase;
     font-size: 0.75rem;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.03em;
     padding: 1rem 1.2rem;
-    border-bottom: 1px solid var(--borda);
+    border-bottom: 1px solid #e7e3d8;
 }
 
 .dashboard-page tbody td {
     padding: 1rem 1.2rem;
-    color: var(--texto-principal);
+    color: #1E2A1B;
     vertical-align: middle;
 }
 
@@ -210,18 +225,15 @@ body {
 }
 
 .dashboard-page tbody tr:hover {
-    background-color: #f8fafc;
+    background-color: #FAF8F2;
 }
 
-/* ==========================================================================
-   Responsividade (Mobile & Tablets)
-   ========================================================================== */
 @media (max-width: 768px) {
     .dash-titulo {
         font-size: 1.6rem;
         margin-left: 0.5rem;
     }
-    
+
     .img-logo {
         height: 60px;
     }

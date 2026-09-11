@@ -31,7 +31,7 @@ if (!empty($id)) {
             </div>
             <div class="float-end">
                 <a href="cadastrar/usuario" class="btn btn-success">Novo Usuário</a>
-                <a href="listar/usuario" class="btn btn-success">Listar Usuários</a>
+                <a href="listar/usuario" class="btn btn-warning">Listar Usuários</a>
             </div>
         </div>
         <div class="card-body">

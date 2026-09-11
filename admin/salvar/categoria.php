@@ -9,8 +9,6 @@ if ($_POST) {
     $descricao = trim($_POST["descricao"] ?? NULL);
 
     
-
-    // Validações básicas
     if (empty($grupo_id)) {
         echo "<script>mensagem('Selecione um grupo!', 'error');</script>";
         exit;
@@ -21,7 +19,7 @@ if ($_POST) {
     }
 
     if (empty($id)) {
-        // Inserir nova categoria
+
         $sqlCadastro = "INSERT INTO categoria (grupo_id, nome, descricao) VALUES (:grupo_id, :nome, :descricao)";
         $consulta = $pdo->prepare($sqlCadastro);
         $consulta->bindParam(":grupo_id", $grupo_id);
@@ -29,7 +27,7 @@ if ($_POST) {
         $consulta->bindParam(":descricao", $descricao);
 
     } else {
-        // Atualizar categoria existente
+
         $sqlCadastro = "UPDATE categoria SET grupo_id = :grupo_id, nome = :nome, descricao = :descricao WHERE id = :id";
         $consulta = $pdo->prepare($sqlCadastro);
         $consulta->bindParam(":grupo_id", $grupo_id);

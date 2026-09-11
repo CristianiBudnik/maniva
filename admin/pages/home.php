@@ -24,6 +24,14 @@ if (!isset($page))
     </header>
     <br>
     <div class="cards-grid text-center">
+        <div class="card card-destaque">
+            <div class="card-label">Categoria com mais produtos</div>
+            <div id="card-categoria-destaque" class="card-value">Carregando...</div>
+        </div>
+        <div class="card card-destaque">
+            <div class="card-label">Grupo com mais produtos</div>
+            <div id="card-grupo-destaque" class="card-value">Carregando...</div>
+        </div>
         <div class="card card-total">
             <div class="card-label">Total de Produtos</div>
             <div id="card-total" class="card-value">Carregando...</div>
@@ -39,10 +47,6 @@ if (!isset($page))
         <div class="card card-1kg-papel-plastico">
             <div class="card-label">Produtos disponiveis</div>
             <div id="card-produto-disponivel" class="card-value">Carregando...</div>
-        </div>
-        <div class="card card-destaque">
-            <div class="card-label">Categoria com mais produtos</div>
-            <div id="card-categoria-destaque" class="card-value">Carregando...</div>
         </div>
     </div>
     <br>

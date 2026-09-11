@@ -9,7 +9,6 @@ if (empty($id)) {
 $pdo->beginTransaction();
 
 try {
-    // Alterna o status: se 1 vira 0 (desativa), se 0 vira 1 (ativa)
     $sql = "UPDATE produto SET disponivel = IF(disponivel = 1, 0, 1) WHERE id = :id LIMIT 1";
     $consulta = $pdo->prepare($sql);
     $consulta->bindParam(":id", $id);

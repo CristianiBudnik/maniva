@@ -3,7 +3,6 @@ if (!isset($page)) exit;
 
 $nome = $descricao = "";
 
-// Se veio ID pela URL para edição
 if (!empty($id)) {
     $sql = "SELECT * FROM grupo WHERE id = :id LIMIT 1";
     $consulta = $pdo->prepare($sql);
@@ -26,7 +25,7 @@ if (!empty($id)) {
             </div>
             <div class="float-end">
                 <a href="cadastrar/grupo" class="btn btn-success">Novo Grupo</a>
-                <a href="listar/grupo" class="btn btn-success">Listar Grupos</a>
+                <a href="listar/grupo" class="btn btn-warning">Listar Grupos</a>
             </div>
         </div>
         <div class="card-body">
