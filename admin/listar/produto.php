@@ -24,6 +24,7 @@
                         <th>Grupo</th>
                         <th>Categoria</th>
                         <th>Descrição</th>
+                        <th>Peso</th>
                         <th width="100px" class="text-center">Status</th>
                         <th width="150px" class="text-center">Opções</th>
                     </tr>
@@ -34,6 +35,7 @@
                                     p.id,
                                     p.nome,
                                     p.descricao,
+                                    p.peso,
                                     p.imagem_url,
                                     p.disponivel,
                                     c.nome AS categoria,
@@ -62,6 +64,7 @@
                             <td><?= htmlspecialchars($dados->grupo) ?></td>
                             <td><?= htmlspecialchars($dados->categoria) ?></td>
                             <td><?= strip_tags($dados->descricao) ?></td>
+                            <td><?= htmlspecialchars($dados->peso) ?></td>
                             <td class="text-center">
                                 <?php if ($dados->disponivel == 1): ?>
                                     <span class="badge bg-success">Disponível</span>

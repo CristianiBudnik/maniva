@@ -1,10 +1,7 @@
 <?php
 require_once 'templates/funcoes.php';
 $grupos = buscarGrupos($pdo);
-
-// Cores de fallback para o "produto-icone" quando o produto não tem imagem_url cadastrada
 $coresFallback = ['#f7f2e2', '#d99a5b', '#e9c98a', '#f4c21a', '#e0af0c'];
-
 $totalProdutos = contarProdutosDisponiveis($pdo);
 ?>
 
@@ -54,7 +51,7 @@ $totalProdutos = contarProdutosDisponiveis($pdo);
         <?php
             $slugGrupo = strtolower($grupo['nome']);
             $produtos = buscarProdutosPorGrupo($pdo, $grupo['id']);
-            if (empty($produtos)) continue; // não renderiza grupo sem produto disponível
+            if (empty($produtos)) continue;
         ?>
         <section class="grupo-secao" data-grupo="<?= htmlspecialchars($slugGrupo) ?>">
             <div class="grupo-titulo-wrap">
@@ -81,13 +78,18 @@ $totalProdutos = contarProdutosDisponiveis($pdo);
                         data-categoria="<?= htmlspecialchars($slugGrupo) ?>"
                         data-nome="<?= htmlspecialchars(strtolower($produto['nome'])) ?>">
                         <div class="produto-card">
-                            <?php if ($temImagem): ?>
-                                <div class="produto-icone"
-                                    style="background-image:url('arquivos/<?= htmlspecialchars($produto['imagem_url']) ?>'); background-size:cover; background-position:center;">
-                                </div>
-                            <?php else: ?>
-                                <div class="produto-icone" style="background:<?= $corFallback ?>;"></div>
-                            <?php endif; ?>
+                            <div class="produto-img-wrap">
+                                <?php if ($temImagem): ?>
+                                    <img src="arquivos/<?= htmlspecialchars($produto['imagem_url']) ?>" 
+                                         alt="<?= htmlspecialchars($produto['nome']) ?>" 
+                                         class="produto-img"
+                                         loading="lazy">
+                                <?php else: ?>
+                                    <div class="produto-fallback" style="background:<?= $corFallback ?>;">
+                                        <span><?= htmlspecialchars(mb_substr($produto['nome'], 0, 1)) ?></span>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
 
                             <span class="produto-categoria"><?= htmlspecialchars(strtoupper($categoriaNome)) ?></span>
                             <h3 class="produto-nome"><?= htmlspecialchars($produto['nome']) ?></h3>
