@@ -32,3 +32,11 @@ type Grupo = {
     id: number;
     nome: string;
 };
+
+type formataProduto = {
+    id: number;
+    nome: string;
+    grupo: string;
+    categoria: string;
+    statusBadge: string;
+};

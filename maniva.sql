@@ -169,7 +169,6 @@ ALTER TABLE `produto_categoria`
   ADD CONSTRAINT `fk_produto_categoria_produto` FOREIGN KEY (`produto_id`) REFERENCES `produto` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_produto_categoria_categoria` FOREIGN KEY (`categoria_id`) REFERENCES `categoria` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
--- View Analítica de Produtos (Dashboard), faz a junção das tabelas produto, categoria e grupo, para serem usadas na dashboard
 CREATE OR REPLACE VIEW `vw_produtos_dashboard` AS
 WITH cte_produtos_limpos AS (
     SELECT 
@@ -183,7 +182,7 @@ WITH cte_produtos_limpos AS (
         CASE WHEN p.disponivel = 1 THEN 'Disponível' ELSE 'Indisponível' END AS status_texto
     FROM produto p
 )
-SELECT  -- Seleciona os dados da tabela produto, categoria e grupo, faz a junção das tabelas produto, categoria e grupo, para serem usadas na dashboard, cp é um apelido para cte_produtos_limpos, pc é um apelido para produto_categoria, c é um apelido para categoria, g é um apelido para grupo
+SELECT 
     cp.id,
     cp.nome,
     cp.descricao,
@@ -193,7 +192,7 @@ SELECT  -- Seleciona os dados da tabela produto, categoria e grupo, faz a junç�
     cp.disponivel,
     cp.status_texto,
     c.id AS categoria_id,
-    COALESCE(c.nome, 'Sem Categoria') AS categoria, -- Seleciona o nome da categoria, se não tiver, mostra 'Sem Categoria'
+    COALESCE(c.nome, 'Sem Categoria') AS categoria,
     g.id AS grupo_id,
     COALESCE(g.nome, 'Sem Grupo') AS grupo
 FROM cte_produtos_limpos cp
@@ -201,7 +200,6 @@ LEFT JOIN produto_categoria pc ON pc.produto_id = cp.id
 LEFT JOIN categoria c ON c.id = pc.categoria_id
 LEFT JOIN grupo g ON g.id = c.grupo_id;
 
--- View Analítica de Categorias (Dashboard), faz a junção das tabelas categoria e grupo, para serem usadas na dashboard
 CREATE OR REPLACE VIEW `vw_categoria_dashboard` AS
 WITH cte_categoria_dados AS (
     SELECT 
@@ -224,7 +222,6 @@ FROM categoria c
 LEFT JOIN grupo g ON g.id = c.grupo_id
 LEFT JOIN cte_categoria_dados mc ON mc.categoria_id = c.id;
 
--- View Analítica de Grupos (Dashboard), faz a junção das tabelas grupo, categoria e produto, para serem usadas na dashboard
 CREATE OR REPLACE VIEW `vw_grupo_dashboard` AS
 WITH cte_grupo_dados AS (
     SELECT 
@@ -248,9 +245,6 @@ FROM grupo g
 LEFT JOIN cte_grupo_dados mg ON mg.grupo_id = g.id;
 
 
--- Procedure 1: Indicadores e Totais da Dashboard
-/*faz a contagem de produtos, produtos disponiveis, categorias e grupos
-e retorna o resultado para serem usados na dashboard*/
 CREATE OR REPLACE PROCEDURE `sp_dashboard_geral`()
 SELECT 
     (SELECT COUNT(id) FROM produto) AS total_produtos,
@@ -258,11 +252,6 @@ SELECT
     (SELECT COUNT(id) FROM categoria) AS total_categorias,
     (SELECT COUNT(id) FROM grupo) AS total_grupos;
 
-
--- Procedure 2: Busca, Filtros e Paginação de Produtos
-/*faz a busca e filtra os produtos por categoria
-recebe parametro de busca, categoria_id, limit e offset
-retorna o resultado para serem usados na dashboard*/
 CREATE OR REPLACE PROCEDURE `sp_produtos_dashboard`(
     IN `p_busca` VARCHAR(150),
     IN `p_categoria_id` INT,
@@ -289,12 +278,6 @@ ORDER BY nome ASC
 LIMIT p_limit OFFSET p_offset;
 
 
--- Trigger para garantir salário positivo na ATUALIZAÇÃO (BEFORE UPDATE) com BEGIN e END
-/* faz a verificação do salário do usuário antes de ser atualizado
- e garante que seja sempre positivo, caso seja negativo, converte para positivo
-recebe como parametro o salário do usuário
-retorna o salário do usuário
-*/
 CREATE OR REPLACE TRIGGER `trg_usuario_salario_positivo_update`
 BEFORE UPDATE ON `usuario`
 FOR EACH ROW
@@ -303,13 +286,6 @@ BEGIN
         SET NEW.salario = ABS(NEW.salario);
     END IF;
 END;
-
--- Trigger para garantir salário positivo no CADASTRO (BEFORE INSERT)
-/* faz a verificação do salário do usuário antes de ser cadastrado
- e garante que seja sempre positivo, caso seja negativo, converte para positivo
-recebe como parametro o salário do usuário
-retorna o salário do usuário
-*/
 CREATE OR REPLACE TRIGGER `trg_usuario_salario_positivo_insert`
 BEFORE INSERT ON `usuario`
 FOR EACH ROW
@@ -320,15 +296,11 @@ BEGIN
 END;
 
 
--- Função que busca o total de produtos ativos de uma categoria
-/*recebe como parametro o id da categoria
-retorna o total de produtos ativos na categoria
-*/
 CREATE FUNCTION `fn_total_produtos_categoria`(
     `p_categoria_id` INT
 )
 RETURNS INT
-READS SQL DATA -- READS SQL DATA indica que a função lê dados do banco
+READS SQL DATA
 BEGIN
     DECLARE total INT;
     SELECT COUNT(p.id)
@@ -339,16 +311,8 @@ BEGIN
     RETURN total;
 END;
 
--- View Centralizadora: Catálogo Geral de Produtos, Categorias e Grupos
-/* Centraliza as informações mais importantes do catálogo espalhadas em tabelas distintas:
-   - produto (detalhes, peso, embalagem, status)
-   - categoria (nome e descrição da categoria)
-   - grupo (linha/grupo principal)
-   - produto_categoria (tabela associativa/relacionamento)
-*/
 CREATE OR REPLACE VIEW `vw_catalogo_completo` AS
 SELECT 
-    -- 1. Dados do Produto
     p.id AS produto_id,
     p.nome AS produto_nome,
     COALESCE(NULLIF(TRIM(p.descricao), ''), 'Sem descrição') AS produto_descricao,
@@ -361,12 +325,9 @@ SELECT
         ELSE 'Inativo' 
     END AS produto_status_texto,
 
-    -- 2. Dados da Categoria (Tabela Distinta)
     c.id AS categoria_id,
     COALESCE(c.nome, 'Sem Categoria') AS categoria_nome,
     c.descricao AS categoria_descricao,
-
-    -- 3. Dados do Grupo (Tabela Distinta)
     g.id AS grupo_id,
     COALESCE(g.nome, 'Sem Grupo') AS grupo_nome,
     g.descricao AS grupo_descricao
